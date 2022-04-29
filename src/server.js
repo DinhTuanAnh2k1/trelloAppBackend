@@ -1,16 +1,28 @@
 import express from "express";
 import "dotenv/config";
-import connection from './config/connectDB';
+import { connectDB, getDB } from './config/connectDB';
+import { createNew } from './models/board.model';
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
-app.get("/", (req, res) => {
-    res.send("hello world with node.js!");
-})
+connectDB()
+    .then(() => {
+        runApp();
+    }).catch(err => {
+        console.error(err);
+    })
 
-// connection();
 
-app.listen(port, () => {
-    console.log("Node.js server is running on the port: " + port);
-});
+const runApp = () => {
+
+    app.get("/", async(req, res) => {
+        res.send("hello world with node.js!");
+    })
+
+    // connection();
+
+    app.listen(port, () => {
+        console.log("Node.js server is running on the port: " + port);
+    });
+}

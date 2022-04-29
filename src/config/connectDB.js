@@ -10,21 +10,23 @@ const client = new MongoClient(url);
 
 const dbName = process.env.DB_NAME;
 
-const connection = async() => {
+let db;
+
+const connectDB = async() => {
     try {
         //Use connection method to connection to the MongoDB server
         await client.connect();
         console.log("Connected successfully to MongoDB");
-        const db = client.db(dbName);
-        const collection = db.collection('documents');
-
-        const insertResult = await collection.insertMany([{ a: 1 }, { a: 2 }, { a: 3 }]);
-        console.log('Inserted documents successfully =>', insertResult);
+        db = client.db(dbName);
     } catch (error) {
         console.log("Failed to connect to MongoDB", error);
     } finally {
-        client.close();
+        // client.close();
     }
 }
 
-export default connection;
+const getDB = () => {
+    return db;
+}
+
+module.exports = { connectDB, getDB };
