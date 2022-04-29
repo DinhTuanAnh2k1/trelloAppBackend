@@ -16,14 +16,17 @@ const validateSchema = async(data) => {
 }
 
 const createNew = async(data) => {
+    let result = null,
+        errCode = 0;
     try {
         const value = await validateSchema(data);
         const db = getDB();
-        const result = await db.collection(boardCollectionName).insertOne(value);
-        console.log(result);
+        result = await db.collection(boardCollectionName).insertOne(value);
     } catch (error) {
-        console.log(error)
+        result = error.message;
+        errCode = 1;
     }
+    return { result, errCode };
 }
 
 module.exports = {
